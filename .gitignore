@@ -1,0 +1,7 @@
+testfiles/
+*.coref
+*.html
+*.mables
+*.parzu
+*.pyc
+.idea/
