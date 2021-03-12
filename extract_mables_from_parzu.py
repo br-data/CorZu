@@ -590,22 +590,24 @@ for line in open(sys.argv[1],'r').readlines():
             #coref info
             if not tok[-1].endswith('-') and not tok[-1].endswith('_'): #and not tok[4]=='PRF': #no reflexives
                 for id in tok[-1].split('|'):
-                    cid=int(re.search('\d+',id).group())
-                    if re.match('\(\d+\)',id):
-                        if coref.has_key(cid): coref[cid].append([sent_nr,int(tok[0]),int(tok[0])])
-                        else: coref[cid]=[[sent_nr,int(tok[0]),int(tok[0])]]
-                    elif re.match('\(\d+',id):
-                        aggr.insert(0,[cid,sent_nr,int(tok[0])])
-                    elif re.match('\d+\)',id):
-                        for ext in aggr:
-                            if ext[0]==cid:
-                                aggr.remove(ext)
-                                ext=ext[1:]
-                                ext.append(int(tok[0]))
-                                break
-                        if coref.has_key(cid): coref[cid].append(ext)
-                        else: coref[cid]=[ext]
-                    else: pdb.set_trace()
+                    result = re.search('\d+',id)
+                    if result is not None:
+                        cid=int(result.group())
+                        if re.match('\(\d+\)',id):
+                            if coref.has_key(cid): coref[cid].append([sent_nr,int(tok[0]),int(tok[0])])
+                            else: coref[cid]=[[sent_nr,int(tok[0]),int(tok[0])]]
+                        elif re.match('\(\d+',id):
+                            aggr.insert(0,[cid,sent_nr,int(tok[0])])
+                        elif re.match('\d+\)',id):
+                            for ext in aggr:
+                                if ext[0]==cid:
+                                    aggr.remove(ext)
+                                    ext=ext[1:]
+                                    ext.append(int(tok[0]))
+                                    break
+                            if coref.has_key(cid): coref[cid].append(ext)
+                            else: coref[cid]=[ext]
+                        else: pdb.set_trace()
 
         #if not verbs=={}:pdb.set_trace()      
         verbs=get_subcat(verbs,sentence)         
